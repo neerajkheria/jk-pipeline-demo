@@ -4,14 +4,14 @@ pipeline {
     environment {
         DEPLOY_USER = 'ubuntu'
         DEPLOY_HOST = '18.118.20.196'
-        DEPLOY_KEY = credentials('jk-demo')  // SSH key added in Jenkins Credentials
+        DEPLOY_KEY = credentials('ssh-key')  // SSH key added in Jenkins Credentials
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/yourusername/flask-jenkins-demo.git'
+                    url: 'https://github.com/neerajkheria/jk-pipeline-demo.git'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Deploy to VM') {
             steps {
-                sshagent(['jenkins-ssh-key']) {
+                sshagent(['ssh-key']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_HOST 'bash -s' < deploy.sh
                     """
